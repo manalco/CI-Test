@@ -25,7 +25,10 @@ jobs:
         run: flake8 . --exclude=venv
 
       - name: Run Unit Tests
-        run: pytest tests/ --ignore=tests/test_integration.py
+        env:
+          PYTHONPATH: .
+        run: |
+          python -m pytest tests/ --ignore=tests/test_integration.py
 
   # JOB 2: Pruebas de Integración (Solo si el Job 1 pasa)
   integration-testing:
@@ -54,5 +57,7 @@ jobs:
       
       - name: Run Integration Tests
         env:
+          PYTHONPATH: .
           DATABASE_URL: postgresql://postgres:password_seguro@localhost:5432/uniticket_db
-        run: pytest tests/test_integration.py
+        run: |
+          python -m pytest tests/test_integration.py
